@@ -1,7 +1,6 @@
 E2Lib.RegisterExtension("vehicularcore", false, "E2 functions for controlling vehicles of multiple kinds")
 
 local vehicular = {}
-vehicular.lockedVehicles = {}
 
 __e2setcost(5)
 
@@ -23,7 +22,7 @@ e2function void entity:setEngineState(state)
         return
     end
     if isSimfphys(this) then
-        if state != 0 then
+        if state ~= 0 then
             this:SetActive(true)
             this:StartEngine()
         else
@@ -66,7 +65,7 @@ e2function void entity:setHandbrake(value)
         return
     end
     if isSimfphys(this) then
-        this.PressedKeys["joystick_handbrake"] = value != 0 and 1 or 0
+        this.PressedKeys["joystick_handbrake"] = value ~= 0 and 1 or 0
     else
         this:SetHandbrake(value == 1)
     end
@@ -76,7 +75,7 @@ e2function void entity:setClutch(value)
         self:throw("This entity isn't a simfphys vehicle!", "")
         return
     end
-    this.PressedKeys["joystick_clutch"] = value != 0 and 1 or 0
+    this.PressedKeys["joystick_clutch"] = value ~= 0 and 1 or 0
 end
 
 e2function void entity:ejectDriver()
@@ -127,29 +126,18 @@ e2function void entity:setLocked(value)
         return
     end
     if isSimfphys(this) then
-        if value != 0 then
+        if value ~= 0 then
             this:Lock()
         else
             this:UnLock()
         end
     else
-        if value != 0 then
-            vehicular.lockedVehicles[#vehicular.lockedVehicles + 1] = this
-        else
-            table.remove(vehicular.lockedVehicles, table.KeyFromValue(vehicular.lockedVehicles, this))
-        end
+        this.vehicular_core_locked = value ~= 0
     end
 end
 
 hook.Add("CanPlayerEnterVehicle", "vehicular_core_vehicleenter", function(ply, vehicle, seatnum)
-    print(vehicular.lockedVehicles[table.KeyFromValue(vehicular.lockedVehicles, vehicle)])
-    if vehicular.lockedVehicles[table.KeyFromValue(vehicular.lockedVehicles, vehicle)] then
+    if vehicle.vehicular_core_locked then
         return false
-    end
-end)
-
-hook.Add("EntityRemoved", "vehicular_core_entityremoved", function(ent)
-    if vehicular.lockedVehicles[table.KeyFromValue(vehicular.lockedVehicles, ent)] then
-        table.remove(vehicular.lockedVehicles, table.KeyFromValue(vehicular.lockedVehicles, ent))
     end
 end)
