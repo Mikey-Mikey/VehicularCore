@@ -96,9 +96,9 @@ e2function void entity:ejectPassengers()
         return
     end
     if isSimfphys(this) and istable(this.pSeat) then
-        for i = 1, table.Count(this.pSeat) do
-            if IsValid(this.pSeat[i]) then
-                local Driver = this.pSeat[i]:GetDriver()
+        for i,seat in ipairs(this.pSeat) do
+            if IsValid(seat) then
+                local Driver = seat:GetDriver()
 
                 if IsValid(Driver) then
                     Driver:ExitVehicle()
