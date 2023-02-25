@@ -136,6 +136,20 @@ e2function void entity:setLocked(value)
     end
 end
 
+e2function void entity:setHeadlights(value)
+    if !isSimfphys(this) then
+        self:throw("This entity isn't a simfphys vehicle!", "")
+        return
+    end
+    if isSimfphys(this) then
+        this.LightsActivated = value ~= 0
+		this.LampsActivated = value ~= 0
+			
+		this:SetLightsEnabled(value ~= 0)
+		this:SetLampsEnabled(value ~= 0)
+    end
+end
+
 hook.Add("CanPlayerEnterVehicle", "vehicular_core_vehicleenter", function(ply, vehicle, seatnum)
     if vehicle.vehicular_core_locked then
         return false

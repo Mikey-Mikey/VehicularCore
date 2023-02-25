@@ -36,6 +36,11 @@ E2Helper.Descriptions["setLocked"] = [[
 Sets the locked state of the specified vehicle.
 ]]
 
+E2Helper.Descriptions["setHeadlights"] = [[
+Turns the headlights of the specified vehicle on or off. (1 or 0)
+*Simfphys only!
+]]
+
 E2Helper.Descriptions["isSimfphys"] = [[
 Returns 1 or 0 if the specified vehicle is a simfphys vehicle.
 ]]
