@@ -2,15 +2,15 @@ E2Lib.RegisterExtension("vehicularcore", false, "E2 functions for controlling ve
 
 local vehicular = {}
 
-__e2setcost(5)
-
-function isSimfphys(e)
+local function isSimfphys(e)
     return e and e:GetClass() == "gmod_sent_vehicle_fphysics_base"
 end
 
-function isVehicle(e)
+local function isVehicle(e)
     return e and (e:IsVehicle() or isSimfphys(e))
 end
+
+__e2setcost(5)
 
 e2function number entity:isSimfphys()
     return isSimfphys(this) and 1 or 0
@@ -95,19 +95,16 @@ e2function void entity:ejectPassengers()
         self:throw("This entity isn't a vehicle!", "")
         return
     end
-    if isSimfphys(this) then
-        if istable( this.pSeat ) then
-			for i = 1, table.Count( this.pSeat ) do
-				if IsValid( this.pSeat[i] ) then
-					
-					local Driver = this.pSeat[i]:GetDriver()
-					
-					if IsValid( Driver ) then
-						Driver:ExitVehicle()
-					end
-				end
-			end
-		end
+    if isSimfphys(this) and istable(this.pSeat) then
+        for i = 1, table.Count(this.pSeat) do
+            if IsValid(this.pSeat[i]) then
+                local Driver = this.pSeat[i]:GetDriver()
+
+                if IsValid(Driver) then
+                    Driver:ExitVehicle()
+                end
+            end
+        end
     end
 end
 
